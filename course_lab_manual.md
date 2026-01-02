@@ -20,7 +20,7 @@
 // 1. 定義 Header Component
 function Header() {
   return (
-    <header style={{ backgroundColor: '#333', color: 'white', padding: '1rem' }}>
+    <header style={{ backgroundColor: '#333', color: 'white', padding: '1rem', borderRadius: '8px', marginBottom: '1rem' }}>
       <h1>我的第一個 React App</h1>
     </header>
   );
@@ -57,11 +57,10 @@ export default App;
 ```jsx
 // 在 App.jsx 或新檔案 Card.jsx 中定義
 function Card({ title, content }) {
-  // 這裡使用了物件解構 ({ title, content })
   return (
-    <div style={{ border: '1px solid #ccc', borderRadius: '8px', padding: '16px', margin: '10px 0' }}>
-      <h3 style={{ color: '#007bff' }}>{title}</h3>
-      <p>{content}</p>
+    <div style={{ border: '1px solid #ccc', borderRadius: '8px', padding: '16px', margin: '10px 0', textAlign: 'left' }}>
+      <h3 style={{ color: '#646cff', marginTop: 0 }}>{title}</h3>
+      <p style={{ margin: 0 }}>{content}</p>
     </div>
   );
 }
@@ -98,12 +97,12 @@ export default App;
 import { useState } from 'react';
 
 function Counter() {
-  // [變數名稱, 更新變數的函式] = useState(初始值)
   const [count, setCount] = useState(0);
 
   return (
-    <div style={{ textAlign: 'center', marginTop: '50px' }}>
-      <h2>目前計數: {count}</h2>
+    <div style={{ textAlign: 'center', margin: '20px 0', padding: '20px', border: '1px dashed #666', borderRadius: '8px' }}>
+      <h2>Counter Demo</h2>
+      <p style={{ fontSize: '2em', fontWeight: 'bold' }}>目前計數: {count}</p>
       <div style={{ display: 'flex', gap: '10px', justifyContent: 'center' }}>
         <button onClick={() => setCount(count - 1)}>減少 (-)</button>
         <button onClick={() => setCount(count + 1)}>增加 (+)</button>
@@ -114,6 +113,62 @@ function Counter() {
 }
 
 export default Counter; // 記得在 main.jsx 或 App.jsx 裡使用它
+```
+
+---
+
+## 練習 3.5: 子元件溝通 (Child to Parent)
+
+**目標**: 學習如何將資料從子元件往上傳遞給父元件。
+
+### 步驟
+
+1.  建立 `ChildToParent.jsx`。
+2.  在父元件定義 `handleMessage` 函式。
+3.  將該函式透過 props 傳給子元件。
+4.  子元件在 `onClick` 時呼叫該函式。
+
+### 程式碼範例
+
+```jsx
+import { useState } from 'react';
+
+// 1. 子元件
+function ChildButton({ onMessage }) {
+  return (
+    <div style={{ border: '1px dashed #aaa', padding: '10px', marginTop: '10px' }}>
+      <p>我是子元件 (Child)</p>
+      <button onClick={() => onMessage("Hello from Child!")}>
+        傳送 "Hello" 給爸爸
+      </button>
+      <button onClick={() => onMessage("React is fun!")} style={{ marginLeft: '10px' }}>
+        傳送 "React" 給爸爸
+      </button>
+    </div>
+  );
+}
+
+// 2. 父元件
+function ChildToParent() {
+  const [message, setMessage] = useState("等待訊息中...");
+
+  // 定義一個函式，準備給子元件呼叫
+  const handleChildMessage = (msg) => {
+    setMessage(msg);
+  };
+
+  return (
+    <div style={{ border: '1px solid #ddd', padding: '20px', borderRadius: '8px' }}>
+      <h3>Parent Component</h3>
+      <p>來自兒子的訊息: <strong style={{ color: 'blue' }}>{message}</strong></p>
+      
+      {/* 把函式傳下去 */}
+      <ChildButton onMessage={handleChildMessage} />
+    </div>
+  );
+}
+
+export default ChildToParent;
 ```
 
 ---
@@ -138,26 +193,28 @@ function UserList() {
   const [loading, setLoading] = useState(true);
 
   // useEffect(callback, dependencyArray)
-  // 空陣列 [] 代表只在「元件第一次掛載」時執行 (相當於 jQuery 的 $(document).ready)
+  // 空陣列 [] 代表只在「元件第一次掛載」時執行
   useEffect(() => {
     fetch('https://jsonplaceholder.typicode.com/users')
       .then(res => res.json())
       .then(data => {
-        setUsers(data);
+        // Limit to 5 users for demo
+        setUsers(data.slice(0, 5));
         setLoading(false);
       })
       .catch(err => console.error("Error fetching data:", err));
   }, []);
 
-  if (loading) return <p>載入中...</p>;
+  if (loading) return <p>載入使用者資料中...</p>;
 
   return (
-    <div style={{ padding: '20px' }}>
-      <h2>使用者列表 (API Demo)</h2>
-      <ul>
+    <div style={{ padding: '20px', border: '1px solid #444', borderRadius: '8px', margin: '20px 0' }}>
+      <h2>使用者列表 (API Fetch Demo)</h2>
+      <ul style={{ listStyle: 'none', padding: 0, textAlign: 'left' }}>
         {users.map(user => (
-          <li key={user.id} style={{ marginBottom: '10px' }}>
-            <strong>{user.name}</strong> - {user.email}
+          <li key={user.id} style={{ marginBottom: '10px', padding: '10px', background: '#333', borderRadius: '4px' }}>
+            <strong style={{ color: '#646cff' }}>{user.name}</strong> <br />
+            <small>{user.email}</small>
           </li>
         ))}
       </ul>
@@ -188,39 +245,30 @@ function App() {
 
 **目標**: 整合 Props, State, List Rendering 完成一個功能完整的 App。
 
-### 完整程式碼 (`App.jsx`)
-
-```jsx
 import { useState } from 'react';
-import './App.css'; // 假設你有基本樣式
 
-function App() {
-  // 1. 定義 State: 待辦事項列表
+function TodoApp() {
   const [todos, setTodos] = useState([
     { id: 1, text: "學習 React", completed: true },
     { id: 2, text: "寫作業", completed: false }
   ]);
   const [inputValue, setInputValue] = useState("");
 
-  // 2. 新增功能
   const handleAdd = () => {
-    if (!inputValue.trim()) return; // 防止空字串
+    if (!inputValue.trim()) return;
     const newTodo = {
-      id: Date.now(), // 用時間戳記當作臨時 ID
+      id: Date.now(),
       text: inputValue,
       completed: false
     };
-    // 使用 Spread Operator (...) 建立新陣列
     setTodos([...todos, newTodo]);
-    setInputValue(""); // 清空輸入框
+    setInputValue("");
   };
 
-  // 3. 刪除功能
   const handleDelete = (id) => {
     setTodos(todos.filter(todo => todo.id !== id));
   };
 
-  // 4. 切換完成狀態
   const handleToggle = (id) => {
     setTodos(todos.map(todo => 
       todo.id === id ? { ...todo, completed: !todo.completed } : todo
@@ -228,22 +276,20 @@ function App() {
   };
 
   return (
-    <div className="container" style={{ maxWidth: '500px', margin: '2rem auto', border: '1px solid #ddd', padding: '2rem', borderRadius: '10px' }}>
-      <h1 style={{ textAlign: 'center' }}>Todo List</h1>
+    <div className="todo-container" style={{ maxWidth: '500px', margin: '2rem auto', border: '1px solid #646cff', padding: '2rem', borderRadius: '10px' }}>
+      <h1 style={{ textAlign: 'center' }}>Todo List Final Project</h1>
     
-      {/* 輸入區塊 */}
       <div style={{ display: 'flex', gap: '10px', marginBottom: '20px' }}>
         <input 
           type="text" 
           placeholder="新增待辦事項..." 
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
-          style={{ flex: 1, padding: '8px' }}
+          style={{ flex: 1, padding: '8px', borderRadius: '4px', border: '1px solid #ccc' }}
         />
-        <button onClick={handleAdd} style={{ padding: '8px 16px' }}>新增</button>
+        <button onClick={handleAdd}>新增</button>
       </div>
 
-      {/* 列表區塊 */}
       <ul style={{ listStyle: 'none', padding: 0 }}>
         {todos.map(todo => (
           <li key={todo.id} style={{ 
@@ -252,18 +298,20 @@ function App() {
             alignItems: 'center',
             padding: '10px',
             borderBottom: '1px solid #eee',
-            textDecoration: todo.completed ? 'line-through' : 'none',
-            color: todo.completed ? '#aaa' : '#333'
+            marginBottom: '5px',
+            background: todo.completed ? '#f0f0f0' : '#fff',
+            color: todo.completed ? '#888' : '#333',
+            borderRadius: '4px'
           }}>
             <span 
               onClick={() => handleToggle(todo.id)} 
-              style={{ cursor: 'pointer', flex: 1 }}
+              style={{ cursor: 'pointer', flex: 1, textAlign: 'left' }}
             >
               {todo.completed ? '☑️' : '⬜️'} {todo.text}
             </span>
             <button 
               onClick={() => handleDelete(todo.id)}
-              style={{ background: 'red', color: 'white', border: 'none', padding: '4px 8px', borderRadius: '4px', cursor: 'pointer' }}
+              style={{ background: '#ff4444', color: 'white', border: 'none', marginLeft: '10px', fontSize: '0.8em' }}
             >
               刪除
             </button>
@@ -276,5 +324,5 @@ function App() {
   );
 }
 
-export default App;
+export default TodoApp;
 ```

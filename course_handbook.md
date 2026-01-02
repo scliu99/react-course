@@ -109,7 +109,58 @@ function ProductCard({ title, price }) {
 
 ---
 
-## 5. State (狀態)：元件的記憶力
+## 5. 資料逆流：子元件傳話給父元件 (Child to Parent)
+
+這是 React 另一個重要的觀念單元。
+我們前面說過 Props 是「單向」的 (父 -> 子)，那如果兒子想跟爸爸說話怎麼辦？
+
+### 5.1 核心概念：父親給兒子一個「呼叫器」
+父元件不能直接讀取子元件的資料。
+解決方法是：**父元件將一個函式 (Function) 當作 Props 傳給子元件**。
+當子元件發生事情時，就呼叫這個函式，把資料當作參數傳回去。
+
+**比喻**：
+*   **Props (資料)**：爸爸給兒子 100 元 (兒子只能花，不能改爸爸錢包)。
+*   **Props (函式)**：爸爸給兒子一張信用卡。兒子刷卡 (呼叫函式)，扣的是爸爸的帳戶 (更新父元件 State)。
+
+### 5.2 實作範例
+
+**情境**：有一個 `Counter` (子元件) 裡面的按鈕被按了，要通知 `App` (父元件) 更新總數。
+
+```jsx
+// 父元件 (App)
+function App() {
+  const [total, setTotal] = useState(0);
+
+  // 1. 定義一個函式，準備給兒子用
+  const handleUpdate = (amount) => {
+    setTotal(total + amount);
+  };
+
+  return (
+    <div>
+      <h1>總數: {total}</h1>
+      {/* 2. 把這個函式當作 Props 傳下去 */}
+      <Counter onUpdate={handleUpdate} />
+    </div>
+  );
+}
+
+// 子元件 (Counter)
+// 3. 接收 props 裡的 onUpdate 函式
+function Counter({ onUpdate }) {
+  return (
+    <div>
+      {/* 4. 發生事件時，呼叫這個函式，並把 1 傳回去 */}
+      <button onClick={() => onUpdate(1)}>+1</button>
+    </div>
+  );
+}
+```
+
+---
+
+## 6. State (狀態)：元件的記憶力
 
 這是最關鍵的概念。
 
@@ -137,7 +188,7 @@ const [count, setCount] = useState(0);
 
 ---
 
-## 6. Component 的生命週期 (Lifecycle) 與 useEffect
+## 7. Component 的生命週期 (Lifecycle) 與 useEffect
 
 若要真正聽懂 `useEffect`，我們必須了解 Component 的「一生」。就像人會生老病死，Component 也有三個階段：
 
@@ -258,7 +309,7 @@ function Clock() {
 
 ---
 
-## 7. 列表渲染 (Lists)
+## 8. 列表渲染 (Lists)
 
 在 HTML 我們要寫五個 `<li>` 就要複製貼上五次。
 在 React，我們用 JavaScript 的陣列方法 `map` 來自動產生。
@@ -280,10 +331,11 @@ return (
 
 ---
 
-## 8. 總結
+## 9. 總結
 
 1.  **React 是宣告式的**：你負責改資料，React 負責更新畫面。
 2.  **Component**：把 UI 切成小積木。
 3.  **Props**：積木之間的溝通線 (唯讀)。
-4.  **useState**：積木自己的記憶體 (可修改，會驅動畫面更新)。
-5.  **useEffect**：與外界溝通的自動化腳本 (API、計時器)。
+4.  **Callback**：子元件透過函式呼叫與父元件溝通。
+5.  **useState**：積木自己的記憶體 (可修改，會驅動畫面更新)。
+6.  **useEffect**：與外界溝通的自動化腳本 (API、計時器)。

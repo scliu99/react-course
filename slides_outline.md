@@ -75,6 +75,14 @@ React 大量使用現代 JS 語法，你必須知道：
 
 ---
 
+## Slide 10.5: 資料逆流 (Child to Parent)
+- Props 是單向的 (Parent -> Child)。
+- 怎麼回傳資料？ **Callback Function**。
+- 父傳遞 function 給子，子呼叫 function + 參數。
+- 範例：計數器按鈕在子元件，更新父元件的 State。
+
+---
+
 ## Section 4: 實戰 - Todo List 邏輯
 
 ## Slide 11: 陣列渲染 (List Rendering)

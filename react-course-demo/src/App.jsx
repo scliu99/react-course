@@ -3,6 +3,7 @@ import Header from './components/Header'
 import Card from './components/Card'
 import Counter from './components/Counter'
 import UserList from './components/UserList'
+import ChildToParent from './components/ChildToParent'
 import TodoApp from './components/TodoApp'
 
 function App() {
@@ -39,7 +40,15 @@ function App() {
                     <hr />
                     <h2>Exercise 3: State & Events</h2>
                     <Counter />
-                    {/* <Counter /> */}
+                </section>
+            )}
+
+            {/* 練習 3.5 */}
+            {(activeTab === 'all' || activeTab === 'state') && (
+                <section>
+                    <hr />
+                    <h2>Exercise 3.5: Child to Parent</h2>
+                    <ChildToParent />
                 </section>
             )}
 
