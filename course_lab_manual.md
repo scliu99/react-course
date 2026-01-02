@@ -5,14 +5,17 @@
 ---
 
 ## 練習 1: 建立第一個 Component (Hello Components)
+
 **目標**: 熟悉 JSX 語法與 Component 結構。
 
 ### 步驟
+
 1. 打開 `App.jsx`。
 2. 清空原本的內容，建立一個新的 `App` component。
 3. 建立一個 `Header` component 並在 `App` 中使用它。
 
 ### 程式碼範例 (`App.jsx`)
+
 ```jsx
 // 1. 定義 Header Component
 function Header() {
@@ -41,13 +44,16 @@ export default App;
 ---
 
 ## 練習 2: 使用 Props 傳遞資料 (Dynamic Cards)
+
 **目標**: 學習如何讓 Component 接收外部資料 (重用性)。
 
 ### 步驟
+
 1. 建立一個 `Card` component，接收 `title` 和 `content` 兩個 props。
 2. 在 `App` 中呼叫三次 `Card`，傳入不同資料。
 
 ### 程式碼範例
+
 ```jsx
 // 在 App.jsx 或新檔案 Card.jsx 中定義
 function Card({ title, content }) {
@@ -77,14 +83,17 @@ export default App;
 ---
 
 ## 練習 3: 讓畫面動起來 - useState (Counter)
+
 **目標**: 體驗 State 改變觸發畫面更新的神奇效果。
 
 ### 步驟
+
 1. 引入 `{ useState }`。
 2. 建立計數器 state。
 3. 綁定 `onClick` 事件。
 
 ### 程式碼範例
+
 ```jsx
 import { useState } from 'react';
 
@@ -110,14 +119,17 @@ export default Counter; // 記得在 main.jsx 或 App.jsx 裡使用它
 ---
 
 ## 練習 4: 接串外部資料 (Side Effects & API)
+
 **目標**: 學習使用 `useEffect` 在元件載入時呼叫 API 獲取資料。
 
 ### 步驟
+
 1. 建立 `UserList` component。
 2. 使用 `useState` 儲存使用者列表 (`users`)。
 3. 使用 `useEffect` 搭配 `fetch` 呼叫 `jsonplaceholder` API。
 
 ### 程式碼範例
+
 ```jsx
 import { useState, useEffect } from 'react';
 
@@ -157,6 +169,7 @@ export default UserList;
 ```
 
 **別忘了在 `App.jsx` 中使用它：**
+
 ```jsx
 import UserList from './UserList';
 
@@ -172,9 +185,11 @@ function App() {
 ---
 
 ## 專案實戰: 待辦事項清單 (Todo List)
+
 **目標**: 整合 Props, State, List Rendering 完成一個功能完整的 App。
 
 ### 完整程式碼 (`App.jsx`)
+
 ```jsx
 import { useState } from 'react';
 import './App.css'; // 假設你有基本樣式
@@ -215,7 +230,7 @@ function App() {
   return (
     <div className="container" style={{ maxWidth: '500px', margin: '2rem auto', border: '1px solid #ddd', padding: '2rem', borderRadius: '10px' }}>
       <h1 style={{ textAlign: 'center' }}>Todo List</h1>
-      
+    
       {/* 輸入區塊 */}
       <div style={{ display: 'flex', gap: '10px', marginBottom: '20px' }}>
         <input 
@@ -255,7 +270,7 @@ function App() {
           </li>
         ))}
       </ul>
-      
+    
       {todos.length === 0 && <p style={{ textAlign: 'center', color: '#999' }}>目前沒有待辦事項 🎉</p>}
     </div>
   );

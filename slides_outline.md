@@ -6,6 +6,7 @@
 - **講師**: [Your Name]
 
 ## Slide 2: 今日目標
+
 1. 搞懂 React 在紅什麼？與 jQuery 差在哪？
 2. 學會 React 核心三大將：Component, Props, State
 3. 實戰：做出一個 Todo List 待辦清單

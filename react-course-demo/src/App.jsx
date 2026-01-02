@@ -39,6 +39,7 @@ function App() {
                     <hr />
                     <h2>Exercise 3: State & Events</h2>
                     <Counter />
+                    {/* <Counter /> */}
                 </section>
             )}
 
